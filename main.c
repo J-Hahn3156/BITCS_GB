@@ -1,13 +1,18 @@
 #include <gb/gb.h>
-#include <gb/types.h>
 #include <stdio.h>
+
+#define FRAME_INCREMENT 15
 
 void main()
 {
-    BYTE frameCount = 0;
+    int frameCount = 1;
     while(1)
     {
-        printf("HELLO WORLD %d\n", frameCount);
+        if (frameCount % FRAME_INCREMENT == 0)
+        {
+            printf("Animate\n", frameCount);
+            frameCount = 0;
+        }
         frameCount++;
         wait_vbl_done();
     }
