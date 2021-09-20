@@ -1,0 +1,9 @@
+# Exclude generated files
+*.sym
+*.lst
+*.map
+*.o
+*.gb
+
+# Exclude directories
+/emulator
