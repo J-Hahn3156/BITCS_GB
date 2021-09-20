@@ -1,37 +1,18 @@
 // gdbk include
 #include <gb/gb.h>
 #include <stdio.h>
+#include "shelf.c"
+#include "bkg.c"
 
-// project include
-#include "types.h"
-
-#define FRAME_INCREMENT 15
-
-void init()
-{
-    
+//setup sprites, widow, and background
+void init(){
+    set_bkg_data(0, 3, shelf);
+    set_bkg_tiles(0,0,20,18,bkg_map);
+    SHOW_BKG;
+    DISPLAY_ON;
 }
 
-void main()
-{
+//main
+void main(){
     init();
-    int frameCount = 0;
-    Player player;
-    
-    while(1)
-    {
-        // game logic
-        if (frameCount % FRAME_INCREMENT == 0)
-        {
-            printf("anim on frame %d\n", frameCount);
-        }
-        
-        // frame increment and timing
-        frameCount++;
-        if (frameCount >= 60)
-        {
-            frameCount = 0;
-        }
-        wait_vbl_done();
-    }
 }
