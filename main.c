@@ -10,7 +10,7 @@ movingPot potting[8];
 UINT8 size = 16;
 
 void spriteMovment(UINT8 potID, UINT8 x, UINT8 y){
-    UINT8 spriteID = potID >> 2;
+    UINT8 spriteID = potID * 4;
 
     move_sprite(spriteID, x, y);
     move_sprite(spriteID + 1 , x + 8, y);
@@ -29,24 +29,26 @@ void updatePlayer(metaSprite* player){
 */
 void setupPot(UINT8 x, UINT8 y, UINT8 potID){
     
-    UINT8 spriteID = potID >> 2;
+    UINT8 spriteID = potID * 4;
     //struct movingPot pot = ms -> data;
     potting[potID].sprite.x = x;
     potting[potID].y = y;
     potting[potID].sprite.w = size;
     potting[potID].sprite.h = size;
 
+    set_sprite_tile(spriteID, 0);
+    set_sprite_tile(spriteID + 1, 1);
+    set_sprite_tile(spriteID + 2, 2);
+    set_sprite_tile(spriteID + 3, 3);
+
     potting[potID].sprite.ID[0] = 0;
     potting[potID].sprite.ID[1] = 1;
     potting[potID].sprite.ID[2] = 2;
     potting[potID].sprite.ID[3] = 3;
 
-    set_sprite_tile(spriteID, 0);
-    set_sprite_tile(spriteID + 1,1);
-    set_sprite_tile(spriteID + 2,2);
-    set_sprite_tile(spriteID + 3,3);
+    
 
-    spriteMovment(potID, potting[potID].sprite.x, potting[potID].y);
+    spriteMovment(potID, potID * 64, 20);
 }
 
 //setup sprites, widow, and background
