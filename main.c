@@ -63,7 +63,7 @@ void init(){
         UINT8 potX, potY;
         potY = counter/3;
         potX = counter% 3;
-        setupPot(potX * 20, 40 + potY * 18 ,counter);
+        setupPot(30 + potX * 50, 33 + potY * 16 ,counter);
         counter ++;
     }
 
