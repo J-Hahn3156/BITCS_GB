@@ -34,14 +34,15 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
     potting[potID].sprite.w = size;
     potting[potID].sprite.h = size;
 
-    set_sprite_tile(spriteID,0);
     potting[potID].sprite.ID[0] = 0;
-    set_sprite_tile(spriteID + 1,1);
     potting[potID].sprite.ID[1] = 1;
-    set_sprite_tile(spriteID + 2,2);
     potting[potID].sprite.ID[2] = 2;
-    set_sprite_tile(spriteID + 3,3);
     potting[potID].sprite.ID[3] = 3;
+
+    set_sprite_tile(potID, 0);
+    set_sprite_tile(potID + 1,1);
+    set_sprite_tile(potID + 2,2);
+    set_sprite_tile(potID + 3,3);
 
     spriteMovment(&potting, potting[potID].sprite.x, potting[potID].y);
 }
@@ -51,17 +52,16 @@ void init(){
     UINT8 counter = 0;
     UINT8 x = 20;
     UINT8 y = 17;
-    set_sprite_data(0,4, pots);
+    set_bkg_data(0, 3, shelf);
+    set_bkg_tiles(0,0,20,18,bkg_map);
+    set_sprite_data(0,4, potSprite);
     
-    while (counter < 8){
+    while (counter < 1){
         setupPot(x,y,counter);
         x -= 20;
         y -= 18;
         counter ++;
     }
-    set_bkg_data(0, 3, shelf);
-    set_bkg_tiles(0,0,20,18,bkg_map);
-    
 
     SHOW_SPRITES;
     SHOW_BKG;
