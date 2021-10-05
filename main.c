@@ -5,9 +5,10 @@
 #include "bkg.c"
 #include "pots.c"
 #include "meta_sprite.c"
+#define POTS_COUNT 9 
+#define SPRITE_SIZE 16
 
-movingPot potting[8];
-UINT8 size = 16;
+movingPot potting[POTS_COUNT];
 
 void spriteMovment(UINT8 potID, UINT8 x, UINT8 y){
     UINT8 spriteID = potID * 4;
@@ -33,8 +34,8 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
     //struct movingPot pot = ms -> data;
     potting[potID].sprite.x = x;
     potting[potID].y = y;
-    potting[potID].sprite.w = size;
-    potting[potID].sprite.h = size;
+    potting[potID].sprite.w = SPRITE_SIZE;
+    potting[potID].sprite.h = SPRITE_SIZE;
 
     set_sprite_tile(spriteID, 0);
     set_sprite_tile(spriteID + 1, 1);
@@ -48,22 +49,21 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
 
     
 
-    spriteMovment(potID, potID * 64, 20);
+    spriteMovment(potID, potting[potID].sprite.x, potting[potID].y);
 }
 
 //setup sprites, widow, and background
 void init(){
     UINT8 counter = 0;
-    UINT8 x = 20;
-    UINT8 y = 17;
     set_bkg_data(0, 3, shelf);
     set_bkg_tiles(0,0,20,18,bkg_map);
     set_sprite_data(0,4, potSprite);
     
-    while (counter < 2){
-        setupPot(x,y,counter);
-        x += 20;
-        y += 18;
+    while (counter < POTS_COUNT){
+        UINT8 potX, potY;
+        potY = counter/3;
+        potX = counter% 3;
+        setupPot(potX * 20, 40 + potY * 18 ,counter);
         counter ++;
     }
 
