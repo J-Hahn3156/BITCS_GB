@@ -111,15 +111,15 @@ void main(){
     init();
 
     while(1){
-        if(joypad() & J_LEFT){
-            p.sprite.x -= 2;
-            updatePlayer(&p, p.sprite.x, PLACEMENT);
-        }
-        if(joypad() & J_RIGHT){
-            p.sprite.x += 2;
-            updatePlayer(&p, p.sprite.x, PLACEMENT);
-        }
 
-        pDelay(6);
+        if((joypad() & J_LEFT) && (p.sprite.x != 8)){
+            p.sprite.x -= 2;
+        }
+        if((joypad() & J_RIGHT) && (p.sprite.x != 152)){
+            p.sprite.x += 2;
+        }
+        updatePlayer(&p, p.sprite.x, PLACEMENT);
+
+        pDelay(2);
     }
 }
