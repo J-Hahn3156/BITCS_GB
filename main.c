@@ -7,10 +7,18 @@
 #include "meta_sprite.c"
 #define POTS_COUNT 9 
 #define SPRITE_SIZE 16
+#define PLACEMENT 118
 
 movingPot potting[POTS_COUNT];
 
 player p;
+
+void pDelay(UINT8 time){
+    UINT8 i;
+    for (i = 0; i < time; i++){
+        wait_vbl_done();
+    }
+}
 
 void updatePot(UINT8 potID, UINT8 x, UINT8 y){
     UINT8 spriteID = potID * 4;
@@ -69,7 +77,7 @@ void setupPlayer(){
     p.sprite.ID[2] = 38;
     p.sprite.ID[3] = 39;
 
-    updatePlayer(&p, p.sprite.x, 118);
+    updatePlayer(&p, p.sprite.x, PLACEMENT);
 }
 
 //setup sprites, widow, and background
@@ -101,4 +109,17 @@ void init(){
 //main
 void main(){
     init();
+
+    while(1){
+        if(joypad() & J_LEFT){
+            p.sprite.x -= 2;
+            updatePlayer(&p, p.sprite.x, PLACEMENT);
+        }
+        if(joypad() & J_RIGHT){
+            p.sprite.x += 2;
+            updatePlayer(&p, p.sprite.x, PLACEMENT);
+        }
+
+        pDelay(6);
+    }
 }
