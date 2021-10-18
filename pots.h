@@ -26,6 +26,6 @@
 /* Bank of tiles. */
 #define potsBank 0
 /* Start of tile array. */
-extern unsigned char potSprite[];
+extern unsigned char spriteTile[];
 
 /* End of POTS.H */
