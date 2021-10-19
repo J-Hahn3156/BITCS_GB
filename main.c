@@ -120,6 +120,6 @@ void main(){
         }
         updatePlayer(&p, p.sprite.x, PLACEMENT);
 
-        pDelay(2);
+        pDelay(1);
     }
 }
