@@ -21,19 +21,29 @@ void pDelay(UINT8 time){
 }
 
 
-void updatePot(UINT8 potID, UINT8 x, UINT8 y){
-
-    //movingPot pot = potting[potID];
-/*
-    if(pot.potState == INVISIBLE){
-    }
-*/
+void updatePot(movingPot* pot, UINT8 potID, UINT8 x, UINT8 y){
     UINT8 spriteID = potID * 4;
 
     move_sprite(spriteID, x, y);
     move_sprite(spriteID + 1 , x + 8, y);
     move_sprite(spriteID + 2, x, y + 8);
     move_sprite(spriteID + 3, x + 8, y + 8);
+
+    if(pot->state == INVISIBLE){
+
+    }
+
+    if(pot->state == STANDING){
+
+    }
+
+    if(pot->state == FALLING){
+        
+    }
+
+    if(pot->state == BROKEN){
+        
+    }
 
 }
 
@@ -53,6 +63,7 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
     potting[potID].y = y;
     potting[potID].sprite.w = SPRITE_SIZE;
     potting[potID].sprite.h = SPRITE_SIZE;
+    potting[potID].state = STANDING;
 
     set_sprite_tile(spriteID, 0);
     set_sprite_tile(spriteID + 1, 1);
@@ -66,7 +77,7 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
 
     
 
-    updatePot(potID, potting[potID].sprite.x, potting[potID].y);
+    updatePot(&potting[potID], potID ,potting[potID].sprite.x, potting[potID].y);
 }
 
 void setupPlayer(){
