@@ -25,6 +25,7 @@ typedef struct
 typedef struct
 {
     metaSprite sprite;
+    UINT8 frameCount;
     UINT8 y;
     enum potState state;
 } movingPot;

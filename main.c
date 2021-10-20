@@ -23,8 +23,8 @@ void pDelay(UINT8 time){
 
 
 void updatePot(movingPot* pot, UINT8 potID){
-
     UINT8 spriteID = potID * 4;
+    
 /*
     move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y);
     move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y);
@@ -43,12 +43,13 @@ void updatePot(movingPot* pot, UINT8 potID){
             move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 8);
             break;
         case FALLING:
-            move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y + 2);
-            move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y + 2);
-            move_sprite(pot -> sprite.ID[2], pot->sprite.x, pot->y + 10);
-            move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 10);
+            pot->y += 2;
+            move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y);
+            move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y);
+            move_sprite(pot -> sprite.ID[2], pot->sprite.x, pot->y + 8);
+            move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 8);
 
-            if(pot->y > 120){
+            if(pot->y >= 120){
                 pot->state = BROKEN;
             }
 
@@ -77,6 +78,7 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
     potting[potID].sprite.w = SPRITE_SIZE;
     potting[potID].sprite.h = SPRITE_SIZE;
     potting[potID].state = INVISIBLE;
+    potting[potID].frameCount = 0;
 
     set_sprite_tile(spriteID, 0);
     set_sprite_tile(spriteID + 1, 1);
@@ -141,6 +143,11 @@ void main(){
 
         for(x = 0; x < POTS_COUNT; x++){
             updatePot(&potting[x], x);
+            if(potting[x].state == STANDING && potting[x].frameCount == 8){
+                potting[x].frameCount = 0;
+                potting[x].state = FALLING;
+            }
+            potting[x].frameCount++;
         }
 
         if((joypad() & J_LEFT) && (p.sprite.x != 8)){
