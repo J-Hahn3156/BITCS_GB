@@ -9,8 +9,8 @@
 #define SPRITE_SIZE 16
 #define PLACEMENT 118
 
-movingPot potting[POTS_COUNT];
 
+movingPot potting[POTS_COUNT];
 player p;
 
 void pDelay(UINT8 time){
@@ -20,13 +20,21 @@ void pDelay(UINT8 time){
     }
 }
 
+
 void updatePot(UINT8 potID, UINT8 x, UINT8 y){
+
+    //movingPot pot = potting[potID];
+/*
+    if(pot.potState == INVISIBLE){
+    }
+*/
     UINT8 spriteID = potID * 4;
 
     move_sprite(spriteID, x, y);
     move_sprite(spriteID + 1 , x + 8, y);
     move_sprite(spriteID + 2, x, y + 8);
     move_sprite(spriteID + 3, x + 8, y + 8);
+
 }
 
 void updatePlayer(player* p, UINT8 x, UINT8 y){
