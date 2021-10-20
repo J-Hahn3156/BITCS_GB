@@ -5,9 +5,10 @@
 #include "bkg.c"
 #include "pots.c"
 #include "meta_sprite.c"
-#define POTS_COUNT 9 
+#define POTS_COUNT 9
 #define SPRITE_SIZE 16
 #define PLACEMENT 118
+#define SPEED 2
 
 
 movingPot potting[POTS_COUNT];
@@ -21,28 +22,39 @@ void pDelay(UINT8 time){
 }
 
 
-void updatePot(movingPot* pot, UINT8 potID, UINT8 x, UINT8 y){
+void updatePot(movingPot* pot, UINT8 potID){
+
     UINT8 spriteID = potID * 4;
+/*
+    move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y);
+    move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y);
+    move_sprite(pot -> sprite.ID[2], pot->sprite.x, pot->y + 8);
+    move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 8);
+*/
+    switch (pot->state)
+    {
+        case INVISIBLE:
+            pot->state = STANDING;
+            break;
+        case STANDING:
+            move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y);
+            move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y);
+            move_sprite(pot -> sprite.ID[2], pot->sprite.x, pot->y + 8);
+            move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 8);
+            break;
+        case FALLING:
+            move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y + 2);
+            move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y + 2);
+            move_sprite(pot -> sprite.ID[2], pot->sprite.x, pot->y + 10);
+            move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 10);
 
-    move_sprite(spriteID, x, y);
-    move_sprite(spriteID + 1 , x + 8, y);
-    move_sprite(spriteID + 2, x, y + 8);
-    move_sprite(spriteID + 3, x + 8, y + 8);
+            if(pot->y > 120){
+                pot->state = BROKEN;
+            }
 
-    if(pot->state == INVISIBLE){
-
-    }
-
-    if(pot->state == STANDING){
-
-    }
-
-    if(pot->state == FALLING){
-        
-    }
-
-    if(pot->state == BROKEN){
-        
+            break;
+        case BROKEN:
+            break;
     }
 
 }
@@ -58,26 +70,23 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
 
 
     UINT8 spriteID = potID * 4;
+
     //struct movingPot pot = ms -> data;
     potting[potID].sprite.x = x;
     potting[potID].y = y;
     potting[potID].sprite.w = SPRITE_SIZE;
     potting[potID].sprite.h = SPRITE_SIZE;
-    potting[potID].state = STANDING;
+    potting[potID].state = INVISIBLE;
 
     set_sprite_tile(spriteID, 0);
     set_sprite_tile(spriteID + 1, 1);
     set_sprite_tile(spriteID + 2, 2);
     set_sprite_tile(spriteID + 3, 3);
 
-    potting[potID].sprite.ID[0] = 0;
-    potting[potID].sprite.ID[1] = 1;
-    potting[potID].sprite.ID[2] = 2;
-    potting[potID].sprite.ID[3] = 3;
-
-    
-
-    updatePot(&potting[potID], potID ,potting[potID].sprite.x, potting[potID].y);
+    potting[potID].sprite.ID[0] = spriteID;
+    potting[potID].sprite.ID[1] = spriteID + 1;
+    potting[potID].sprite.ID[2] = spriteID + 2;
+    potting[potID].sprite.ID[3] = spriteID + 3;
 }
 
 void setupPlayer(){
@@ -104,17 +113,14 @@ void init(){
     UINT8 counter = 0;
     set_bkg_data(0, 3, shelf);
     set_bkg_tiles(0,0,20,18,bkg_map);
-
     set_sprite_data(0,8, spriteTile);
     
-    
-    while (counter < POTS_COUNT){
-        
+    for (counter = 0; counter < POTS_COUNT; counter++)
+    {
         UINT8 potX, potY;
         potY = counter/3;
         potX = counter% 3;
         setupPot(30 + potX * 50, 33 + potY * 16 ,counter);
-        counter ++;
     }
 
     setupPlayer();
@@ -127,9 +133,15 @@ void init(){
 
 //main
 void main(){
+    
     init();
 
     while(1){
+        UINT8 x;
+
+        for(x = 0; x < POTS_COUNT; x++){
+            updatePot(&potting[x], x);
+        }
 
         if((joypad() & J_LEFT) && (p.sprite.x != 8)){
             p.sprite.x -= 2;
