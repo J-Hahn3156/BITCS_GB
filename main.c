@@ -145,7 +145,10 @@ void main(){
             updatePot(&potting[x], x);
             if(potting[x].state == STANDING && potting[x].frameCount == 8){
                 potting[x].frameCount = 0;
+                if(potting[x].state == STANDING && joypad() & J_A){
                 potting[x].state = FALLING;
+            }
+                
             }
             potting[x].frameCount++;
         }
