@@ -5,11 +5,11 @@
 #include "bkg.c"
 #include "pots.c"
 #include "meta_sprite.c"
-#define POTS_COUNT 9
+#define POTS_COUNT 5
 #define SPRITE_SIZE 16
 #define PLACEMENT 118
 #define SPEED 2
-
+#define TEMPFALL 1
 
 movingPot potting[POTS_COUNT];
 player p;
@@ -146,7 +146,7 @@ void main(){
             if(potting[x].state == STANDING && potting[x].frameCount == 8){
                 potting[x].frameCount = 0;
                 if(potting[x].state == STANDING && joypad() & J_A){
-                potting[x].state = FALLING;
+                potting[TEMPFALL].state = FALLING;
             }
                 
             }
