@@ -1,6 +1,7 @@
 // gdbk include
 #include <gb/gb.h>
 #include <stdio.h>
+#include <rand.h>
 #include "shelf.c"
 #include "bkg.c"
 #include "pots.c"
@@ -27,12 +28,6 @@ void pDelay(UINT8 time){
 void updatePot(movingPot* pot, UINT8 potID){
     UINT8 spriteID = potID * 4;
     
-/*
-    move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y);
-    move_sprite(pot -> sprite.ID[1], pot->sprite.x + 8, pot->y);
-    move_sprite(pot -> sprite.ID[2], pot->sprite.x, pot->y + 8);
-    move_sprite(pot -> sprite.ID[3], pot->sprite.x + 8, pot->y + 8);
-*/
     switch (pot->state)
     {
         case INVISIBLE:
@@ -81,8 +76,6 @@ void updatePlayer(player* p, UINT8 x, UINT8 y){
 }
 
 void setupPot(UINT8 x, UINT8 y, UINT8 potID){
-
-
     UINT8 spriteID = potID * 4;
 
     //struct movingPot pot = ms -> data;
@@ -105,7 +98,6 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
 }
 
 void setupPlayer(){
-
     p.sprite.x = 80;
     p.sprite.w = SPRITE_SIZE;
     p.sprite.h = SPRITE_SIZE;
@@ -140,7 +132,6 @@ void init(){
 
     setupPlayer();
 
-
     SHOW_SPRITES;
     SHOW_BKG;
     DISPLAY_ON;
@@ -148,18 +139,24 @@ void init(){
 
 //main
 void main(){
-    
+    UINT8 randNum;
     init();
 
     while(1){
         UINT8 x;
 
+        randNum = rand();
+        
         for(x = 0; x < POTS_COUNT; x++){
+            
             updatePot(&potting[x], x);
+            
+            
+            
             if(potting[x].state == STANDING && potting[x].frameCount == 8){
                 potting[x].frameCount = 0;
-                if(potting[x].state == STANDING && joypad() & J_A){
-                potting[TEMPFALL].state = FALLING;
+                if(potting[randNum%9].state == STANDING && joypad() & J_A){
+                potting[randNum%9].state = FALLING;
             }
                 
             }
