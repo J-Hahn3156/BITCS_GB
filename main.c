@@ -5,11 +5,13 @@
 #include "bkg.c"
 #include "pots.c"
 #include "meta_sprite.c"
-#define POTS_COUNT 5
+#define POTS_COUNT 9
 #define SPRITE_SIZE 16
 #define PLACEMENT 118
 #define SPEED 2
-#define TEMPFALL 1
+#define TEMPFALL 5
+#define XOUTOFBOUNDS 160
+#define YOUTOFBOUNDS 160
 
 movingPot potting[POTS_COUNT];
 player p;
@@ -34,7 +36,13 @@ void updatePot(movingPot* pot, UINT8 potID){
     switch (pot->state)
     {
         case INVISIBLE:
-            pot->state = STANDING;
+            move_sprite(pot -> sprite.ID[0], XOUTOFBOUNDS, YOUTOFBOUNDS);
+            move_sprite(pot -> sprite.ID[1], XOUTOFBOUNDS, YOUTOFBOUNDS);
+            move_sprite(pot -> sprite.ID[2], XOUTOFBOUNDS, YOUTOFBOUNDS);
+            move_sprite(pot -> sprite.ID[3], XOUTOFBOUNDS, YOUTOFBOUNDS);
+            if(pot->frameCount >= 200){
+                pot->state = STANDING;
+            }
             break;
         case STANDING:
             move_sprite(pot -> sprite.ID[0], pot->sprite.x, pot->y);
@@ -51,10 +59,15 @@ void updatePot(movingPot* pot, UINT8 potID){
 
             if(pot->y >= 120){
                 pot->state = BROKEN;
+                pot->frameCount = 0;
             }
 
             break;
         case BROKEN:
+            if(pot->frameCount >= 200){
+                pot->state = INVISIBLE;
+                pot->frameCount = 0;
+            }
             break;
     }
 
@@ -77,7 +90,7 @@ void setupPot(UINT8 x, UINT8 y, UINT8 potID){
     potting[potID].y = y;
     potting[potID].sprite.w = SPRITE_SIZE;
     potting[potID].sprite.h = SPRITE_SIZE;
-    potting[potID].state = INVISIBLE;
+    potting[potID].state = STANDING;
     potting[potID].frameCount = 0;
 
     set_sprite_tile(spriteID, 0);
